@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  nominatim:
+    container_name: nominatim
+    image: nominatim
+    build:
+      context: nominatim/
+      dockerfile: "Dockerfile"
+    ports:
+        - "8087:8087"
+    environment:
+        # see https://github.com/mediagis/nominatim-docker/tree/master/4.2#configuration for more options
+        NOMINATIM_PASSWORD: 123456
+        PGHOST: 173.16.238.2
+        PGPASSWORD: your_password_database
+        PGUSER: your_user_database
+        THREADS: 16
+        PBF_URL: https://download.geofabrik.de/europe/monaco-latest.osm.pbf
+        NOMINATIM_DATABASE_DSN: pgsql:dbname=nominatim;hostaddr=173.16.238.2;user=your_user_database;password=your_password_database
+        PGDATABASE: nominatim
+
+    volumes:
+        - ./osmdata:/app/osmdata/
+        - ./scripts:/app/scripts/
+    shm_size: 2gb
